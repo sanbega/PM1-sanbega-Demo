@@ -1,0 +1,12 @@
+body {
+    font-style: italic;
+    margin: 0;
+    padding: 5px;
+}
+
+header, footer {
+    background-color: #0D0FAC;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+}

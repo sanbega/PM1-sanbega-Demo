@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./styles/resent.css">
+    <link rel="stylesheet" href="./styles/styles.css">
+</head>
+<body>
+    <header id="header">
+        <h3>Profile Sanbega</h3>
+        <div class="info">
+            <img src="./img/WhatsApp Image 2024-04-26 at 17.46.55.jpeg" alt="Profile Picture">
+            <p class="profile-description">Soy un Desarrollador Full Stack con experiencia sobresaliente en Node.js, React.js, React Native y Next.js, además de habilidades en bases de datos relacionales y no relacionales. He colaborado en diversos proyectos, incluyendo startups, donde he fortalecido mis capacidades de trabajo en equipo y me he adaptado a metodologías ágiles.</p>
+        </div>
+    </header>
+    <main>
+        <div id="main">
+            <h3>Mis tecnologias favoritas!</h3>
+            <div class="image">
+                <img src="./img/css.png">
+                <img src="./img/js.png">
+                <img src="./img/html.png">
+            </div>
+        </div>
+        <div class="form">
+            <h3>Mis actividades favoritas:</h3>
+            <input type="text" id="activityName" class="input-large" placeholder="Nombre de la Actividad:">
+            <input type="text" id="activityDescription" class="input-medium" placeholder="Descripción de la Actividad:">
+            <input type="text" id="activityImageLink" class="input-small" placeholder="Link de la Imagen:">
+            <button id="addActivityBtn">Agregar Actividad!</button>
+        </div>
+        <div id="activityDetails" class="activities-container"></div>
+    </main>
+    <footer id="footer">
+        <h3>Nos reservamos derechos de admisión.</h3>
+        <img src="./img/linkedin.png">
+        <img src="./img/github.png">
+        <img src="./img/gmail.png">
+    </footer>
+    <script src="./scripts/index.js"></script>
+    <script>
+        function renderActivities() {
+            let activityDetails = document.getElementById("activityDetails");
+            // Vaciar el contenido actual del contenedor
+            activityDetails.innerHTML = '';
+
+            // Obtener el listado completo de actividades
+            let activities = repo.getAllActivities();
+
+            // Mapear el listado de actividades para convertirlos en elementos HTML
+            activities.forEach(function (activity) {
+                let newActivityDiv = document.createElement("div");
+                newActivityDiv.classList.add("activity-details");
+                newActivityDiv.innerHTML = `<img src="${activity.imgUrl}" alt="${activity.title}" style="width: 100px;">
+                                     <p><strong>${activity.title}</strong>: ${activity.description}</p>`;
+
+                // Crear el botón con la equis (X)
+                let closeButton = document.createElement("button");
+                closeButton.innerHTML = "Eliminar Actividad";
+                closeButton.classList.add("close-button");
+
+                closeButton.addEventListener("click", function () {
+                    // Eliminar el div de la actividad al hacer clic en el botón
+                    this.parentNode.remove();
+                });
+
+                // Agregar el botón al div de la actividad
+                newActivityDiv.appendChild(closeButton);
+
+                // Agregar el nuevo elemento al contenedor
+                activityDetails.appendChild(newActivityDiv);
+            });
+        }
+
+        document.getElementById("addActivityBtn").addEventListener("click", function () {
+            let name = document.getElementById("activityName").value;
+            let description = document.getElementById("activityDescription").value;
+            let imageLink = document.getElementById("activityImageLink").value;
+            
+
+            if (!name || !description || !imageLink) {
+                alert("Por favor, completa todos los campos antes de agregar una actividad.");
+            } else {
+                repo.createActivity(Date.now(), name, description, imageLink);
+                renderActivities(); // Llamar a la función para renderizar las actividades nuevamente
+
+                // Limpiar los campos de entrada después de agregar la actividad
+                document.getElementById("activityName").value = '';
+                document.getElementById("activityDescription").value = '';
+                document.getElementById("activityImageLink").value = '';
+
+                alert("Actividad añadida con éxito!");
+            }
+        });
+
+        // Llamar a renderActivities al cargar la página para mostrar las actividades existentes
+        renderActivities();
+    </script>
+</body>
+</html>
